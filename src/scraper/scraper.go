@@ -12,13 +12,14 @@ import (
 
 func Scrape(c *colly.Collector, ticker string) (float64, error) {
 
-	tickerURL := fmt.Sprintf("https://search.brave.com/search?q=%v&source=web", ticker)
+	tickerURL := fmt.Sprintf("https://www.cnbc.com/quotes/%v", strings.ToLower(ticker))
 
 	var value float64
 
 	var err error
 
 	c.OnRequest(func(r *colly.Request) {
+		r.Headers.Set("User-Agent", "Chrome/91.0.4472.124")
 		fmt.Println("Visiting: ", r.URL)
 	})
 
@@ -30,17 +31,18 @@ func Scrape(c *colly.Collector, ticker string) (float64, error) {
 		fmt.Println("Page visited: ", r.Request.URL)
 	})
 
-	c.OnHTML("h1.desktop-heading-h2", func(e *colly.HTMLElement) {
+	c.OnHTML("span.QuoteStrip-lastPrice", func(e *colly.HTMLElement) {
 
 		// Modifying text so that a float can be parsed from it
+		fmt.Println("e.Text: " + e.Text)
 		textString := e.Text
-		textString = strings.ReplaceAll(textString, ",", ".")
-		textString = textString[:len(textString)-4]
+		// if e.Text != "" {
+		// 	textString = textString[1:]
+		// }
+		fmt.Println(textString)
 		value, err = strconv.ParseFloat(textString, 64)
 
 	})
-
-	fmt.Println("Value: " + fmt.Sprintf("%f", value))
 
 	c.OnScraped(func(r *colly.Response) {
 		fmt.Println(r.Request.URL, " scraped!")
