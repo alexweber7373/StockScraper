@@ -14,9 +14,4 @@ func main() {
 
 	app.Run("127.0.0.1:8080")
 
-	// if err != nil {
-	// 	fmt.Println("Error reading input. Exiting.")
-	// 	return
-	// }
-
 }
