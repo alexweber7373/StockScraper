@@ -1,40 +1,22 @@
 package main
 
 import (
-	"fmt"
-	"strings"
-
-	"example.com/stock-scraper/scraper"
-	"github.com/gocolly/colly/v2"
+	"example.com/stock-scraper/routes"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
 
-	c := colly.NewCollector()
+	// Establish web scraper and gin server
+	app := gin.Default()
 
-	var ticker string
+	routes.RegisterRoutes(app)
 
-	fmt.Println("Please enter your ticker symbol you would like the stock for: ")
+	app.Run("127.0.0.1:8080")
 
-	_, err := fmt.Scan(&ticker)
-
-	if err != nil {
-		fmt.Println("Error reading input. Exiting.")
-		return
-	}
-
-	stockValue, err := scraper.Scrape(c, ticker)
-
-	if stockValue == 0.0 {
-		fmt.Println("Error: Scraper did not return a value.")
-		return
-	}
-
-	if err != nil {
-		fmt.Println("Error: " + err.Error())
-		return
-	}
-
-	fmt.Printf("STOCK VALUE FOR %v: $%.2f\n", strings.ToUpper(ticker), stockValue)
+	// if err != nil {
+	// 	fmt.Println("Error reading input. Exiting.")
+	// 	return
+	// }
 
 }
