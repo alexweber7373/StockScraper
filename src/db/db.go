@@ -38,7 +38,8 @@ func createTables() {
 	CREATE TABLE IF NOT EXISTS stocks (
 		id INTEGER PRIMARY KEY AUTOINCREMENT,
 		ticker TEXT NOT NULL,
-		dateTime DATETIME NOT NULL
+		dateTime DATETIME NOT NULL,
+		value REAL NOT NULL
 	)
 	`
 
